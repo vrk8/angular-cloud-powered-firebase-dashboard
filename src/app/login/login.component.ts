@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { NgForm, FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../core/auth.service';
@@ -28,12 +28,12 @@ export class LoginComponent implements OnInit {
     let resp;
     try {
       if (this.isSignUp) {
-        resp = await this.afAuth.auth.createUserWithEmailAndPassword(email, password);
+        resp = await this.afAuth.createUserWithEmailAndPassword(email, password);
         await resp.user.updateProfile({ displayName: `${firstName} ${lastName}`});
         await this.auth.createUserDocument();
         form.reset();
       } else {
-        resp = await this.afAuth.auth.signInWithEmailAndPassword(email, password);
+        resp = await this.afAuth.signInWithEmailAndPassword(email, password);
       }
 
       const uid = resp.user.uid;

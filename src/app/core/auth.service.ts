@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { UserProfile } from '../core/user-profile.model';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -12,17 +12,17 @@ export class AuthService {
   constructor(private router: Router, private afAuth: AngularFireAuth, private afs: AngularFirestore) { }
 
   logout() {
-    this.afAuth.auth.signOut();
+    this.afAuth.signOut();
     this.router.navigate(['']);
   }
 
   isLoggedIn() {
-    return !!this.afAuth.auth.currentUser;
+    return !!this.afAuth.currentUser;
   }
 
-  createUserDocument() {
+  async createUserDocument() {
     // get the current user
-    const user = this.afAuth.auth.currentUser;
+    const user = await this.afAuth.currentUser;
 
     // create the object with new data
     const userProfile: UserProfile = {
@@ -47,7 +47,7 @@ export class AuthService {
   }
 
   async routeOnLogin() {
-    const user = this.afAuth.auth.currentUser;
+    const user = await this.afAuth.currentUser;
     const token = await user.getIdTokenResult();
 
     if (token.claims.admin) {
